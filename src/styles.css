@@ -117,24 +117,28 @@
     /* ── Нижняя панель меню ── */
     #screen-menu > footer,
     #screen-search > footer,
-    #screen-voice > footer {
+    #screen-voice > footer,
+    #screen-cart > footer {
       box-shadow: 0 -6px 28px rgba(30, 27, 75, 0.06);
       border-top-color: rgba(229, 231, 235, 0.65);
     }
-    #screen-menu footer [data-action="cancel-order"] {
-      border-width: 1.5px;
-      box-shadow: 0 2px 10px rgba(225, 29, 72, 0.08);
+    #screen-menu footer [data-action="cancel-order"],
+    #screen-payment footer [data-action="cancel-order"] {
+      border-width: 2px;
+      box-shadow: 0 2px 10px rgba(220, 38, 38, 0.12);
       line-height: 1.2;
     }
     #screen-search footer [data-action="go-menu"],
-    #screen-voice footer [data-action="go-menu"] {
+    #screen-voice footer [data-action="go-menu"],
+    #screen-cart footer [data-action="go-menu"] {
       border-width: 1.5px;
       box-shadow: 0 2px 10px rgba(30, 27, 75, 0.06);
       line-height: 1.2;
     }
     #screen-menu footer [data-action="go-cart"] > .bg-sidebar,
     #screen-search footer [data-action="go-cart"] > .bg-sidebar,
-    #screen-voice footer [data-action="go-cart"] > .bg-sidebar {
+    #screen-voice footer [data-action="go-cart"] > .bg-sidebar,
+    #screen-cart footer [data-action="go-cart"] > .bg-sidebar {
       border-radius: 14px;
       box-shadow: 0 4px 14px rgba(39, 39, 42, 0.28);
     }
@@ -174,11 +178,9 @@
     #screen-product #product-image {
       box-shadow: 0 4px 16px rgba(30, 27, 75, 0.08);
     }
-    #screen-cart > footer,
     #screen-payment .flex.items-stretch.gap-5 {
       gap: 1.25rem;
     }
-    #screen-cart footer .pay-footer-btn.border-kiosk-red,
     #screen-payment footer .pay-footer-btn,
     #screen-payment .flex.items-stretch.gap-5 > .pay-footer-btn {
       box-shadow: 0 2px 10px rgba(30, 27, 75, 0.06);

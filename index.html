@@ -16,6 +16,7 @@
             sidebar: '#27272A',
             'kiosk-red': '#F7931E',
             'pay-red': '#F7931E',
+            'kiosk-danger': '#DC2626',
           },
           fontFamily: {
             sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
@@ -145,7 +146,7 @@
         <!-- Футер меню -->
         <footer class="shrink-0 bg-white border-t border-gray-200 px-8 py-6 flex items-stretch gap-6">
           <button data-action="cancel-order"
-                  class="btn-press shrink-0 bg-white border-2 border-kiosk-red text-kiosk-red text-[24px] font-bold uppercase tracking-wide px-8 rounded-full min-h-[96px] h-[96px] flex items-center justify-center text-center leading-tight">
+                  class="btn-press shrink-0 bg-white border-2 border-kiosk-danger text-kiosk-danger text-[24px] font-bold uppercase tracking-wide px-8 rounded-full min-h-[96px] h-[96px] flex items-center justify-center text-center leading-tight">
             Отменить<br/>покупку
           </button>
           <button data-action="try-pay"
@@ -413,7 +414,7 @@
         </div>
 
         <div class="bg-kiosk px-14 pt-4 pb-5 shrink-0">
-          <div class="border-t-2 border-gray-300 pt-5">
+          <div>
             <div data-customer-panel class="customer-bar hidden w-full items-center gap-3 px-5 py-3 mb-4">
               <svg class="customer-bar-icon" viewBox="0 0 28 20" aria-hidden="true">
                 <rect x="0" y="0" width="28" height="20" rx="3" fill="#22C55E"/>
@@ -455,16 +456,26 @@
           </div>
         </div>
 
-        <footer class="shrink-0 bg-kiosk px-14 py-8 flex items-stretch gap-5">
-          <button data-action="go-menu"
-                  class="btn-press flex-1 bg-white border-2 border-kiosk-red text-kiosk-red text-[28px] font-bold uppercase rounded-full flex items-center justify-center text-center pay-footer-btn">
+        <footer class="shrink-0 bg-white border-t border-gray-200 px-8 py-6 flex items-stretch gap-6">
+          <button data-action="go-menu" type="button"
+                  class="btn-press shrink-0 bg-white border-2 border-gray-300 text-navy text-[24px] font-bold uppercase tracking-wide px-10 rounded-full min-h-[96px] h-[96px] flex items-center justify-center text-center">
             В меню
           </button>
-          <button data-action="try-pay"
-                  class="btn-press btn-kiosk-pay flex-1 pay-footer-btn">
-            <span class="flex w-full h-full items-center justify-center bg-kiosk-red text-white text-[28px] font-bold uppercase rounded-full">
+          <button data-action="try-pay" type="button"
+                  class="btn-press btn-kiosk-pay flex-1 min-w-0 min-h-[96px] h-[96px]">
+            <span class="flex w-full h-full items-center justify-center bg-kiosk-red text-white text-[30px] font-bold uppercase tracking-wide rounded-full whitespace-nowrap px-6">
               Оплатить покупку
             </span>
+          </button>
+          <button data-action="go-cart" type="button"
+                  class="btn-press shrink-0 flex flex-col items-center gap-1 relative">
+            <div class="w-20 h-20 bg-sidebar rounded-2xl flex items-center justify-center relative">
+              <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.5 5M17 13l2.5 5M9 19a1 1 0 100 2 1 1 0 000-2zm8 0a1 1 0 100 2 1 1 0 000-2z"/>
+              </svg>
+              <span data-cart-badge class="hidden absolute -top-2 -right-2 w-10 h-10 bg-kiosk-red text-white text-[22px] font-bold rounded-full flex items-center justify-center">0</span>
+            </div>
+            <span class="text-[20px] font-semibold text-navy uppercase">Корзина</span>
           </button>
         </footer>
       </div>
@@ -527,7 +538,7 @@
               В меню
             </button>
             <button data-action="cancel-order"
-                    class="btn-press flex-1 bg-white border-2 border-kiosk-red text-kiosk-red text-[26px] font-bold uppercase rounded-full flex items-center justify-center pay-footer-btn">
+                    class="btn-press flex-1 bg-white border-2 border-kiosk-danger text-kiosk-danger text-[26px] font-bold uppercase rounded-full flex items-center justify-center pay-footer-btn">
               Отменить покупку
             </button>
           </div>
