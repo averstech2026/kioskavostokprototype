@@ -1,0 +1,16 @@
+{
+  "name": "kioskavostokprototype",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:lan": "vite --host --port 8765",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "vite preview --host --port 8765"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5"
+  }
+}

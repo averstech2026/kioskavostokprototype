@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Скачать фото товаров (Unsplash)</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
+    button { font-size: 1rem; padding: 0.75rem 1.25rem; cursor: pointer; }
+    #log { margin-top: 1rem; font-family: monospace; font-size: 0.85rem; white-space: pre-wrap; }
+    .ok { color: #0a0; }
+    .err { color: #c00; }
+  </style>
+</head>
+<body>
+  <h1>Фото товаров с Unsplash</h1>
+  <p>Unsplash открывается в браузере, но не из терминала. Эта страница скачает все 50 фото в папку <code>assets/products</code>.</p>
+  <ol>
+    <li>Убедитесь, что VPN включён (unsplash.com открывается).</li>
+    <li>Нажмите кнопку и выберите папку <code>d:\kioskprototype\assets\products</code>.</li>
+    <li>После загрузки выполните в терминале: <code>python scripts/apply_local_paths.py</code></li>
+  </ol>
+  <button id="go">Скачать все фото</button>
+  <div id="log"></div>
+  <script>
+    const PRODUCTS = [
+  {
+    "id": "lunch1",
+    "url": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "lunch2",
+    "url": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "lunch3",
+    "url": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "water1",
+    "url": "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "water2",
+    "url": "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "coffee",
+    "url": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "tea",
+    "url": "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "juice",
+    "url": "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "omelet",
+    "url": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "syrniki",
+    "url": "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "porridge",
+    "url": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "pancakes",
+    "url": "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "buckwheat_porridge",
+    "url": "https://images.unsplash.com/photo-1596797038530-2c107229654b?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "caesar",
+    "url": "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "veggie_salad",
+    "url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "vinaigrette",
+    "url": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "cheese_plate",
+    "url": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "cutlet",
+    "url": "https://images.unsplash.com/photo-1551782450-17144efb9c50?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "chicken_grill",
+    "url": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "goulash",
+    "url": "https://images.unsplash.com/photo-1551782450-17144efb9c50?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "baked_fish",
+    "url": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "pasta",
+    "url": "https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "buckwheat",
+    "url": "https://images.unsplash.com/photo-1596797038530-2c107229654b?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "rice",
+    "url": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "mashed",
+    "url": "https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "steamed_veg",
+    "url": "https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "wheat",
+    "url": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "rye",
+    "url": "https://images.unsplash.com/photo-1549931319-a545dcf3bc73?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "toast",
+    "url": "https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "ciabatta",
+    "url": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "croissant",
+    "url": "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "cinnamon",
+    "url": "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "pirozhok",
+    "url": "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "apple_pastry",
+    "url": "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "apple",
+    "url": "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "banana",
+    "url": "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "orange",
+    "url": "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "fruit_mix",
+    "url": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "cheesecake",
+    "url": "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "tiramisu",
+    "url": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "chia",
+    "url": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "icecream",
+    "url": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "milk",
+    "url": "https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "tomato_sauce",
+    "url": "https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "cheese_sauce",
+    "url": "https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "mayo",
+    "url": "https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "container",
+    "url": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "cutlery_set",
+    "url": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "cup",
+    "url": "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=400&fit=crop"
+  },
+  {
+    "id": "napkins",
+    "url": "https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=400&h=400&fit=crop"
+  }
+];
+
+    const log = (msg, cls = '') => {
+      const el = document.getElementById('log');
+      const line = document.createElement('div');
+      line.className = cls;
+      line.textContent = msg;
+      el.appendChild(line);
+    };
+
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    document.getElementById('go').onclick = async () => {
+      const btn = document.getElementById('go');
+      btn.disabled = true;
+      document.getElementById('log').innerHTML = '';
+
+      let dir;
+      try {
+        dir = await window.showDirectoryPicker({ mode: 'readwrite' });
+      } catch (e) {
+        log('Отменено или браузер не поддерживает выбор папки. Используйте Chrome/Edge.', 'err');
+        btn.disabled = false;
+        return;
+      }
+
+      let ok = 0, fail = 0;
+      for (const { id, url } of PRODUCTS) {
+        try {
+          const res = await fetch(url);
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const blob = await res.blob();
+          if (blob.size < 1000) throw new Error('файл слишком маленький');
+          const fh = await dir.getFileHandle(id + '.jpg', { create: true });
+          const w = await fh.createWritable();
+          await w.write(blob);
+          await w.close();
+          log('OK  ' + id + ' (' + blob.size + ' bytes)', 'ok');
+          ok++;
+        } catch (e) {
+          log('FAIL ' + id + ': ' + e.message, 'err');
+          fail++;
+        }
+        await sleep(250);
+      }
+
+      log('\nГотово: ' + ok + ' ok, ' + fail + ' fail');
+      if (ok > 0) {
+        log('Теперь запустите: python scripts/apply_local_paths.py');
+      }
+      btn.disabled = false;
+    };
+  </script>
+</body>
+</html>
