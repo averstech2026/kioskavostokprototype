@@ -5,7 +5,8 @@ import { fileURLToPath } from 'url';
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig({
-  base: './',
+  // GitHub Pages project site: /kioskavostokprototype/
+  base: process.env.GITHUB_PAGES === 'true' ? '/kioskavostokprototype/' : './',
   publicDir: resolve(__dirname, 'public'),
   server: {
     host: true,
