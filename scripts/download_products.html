@@ -13,11 +13,12 @@
 </head>
 <body>
   <h1>Фото товаров с Unsplash</h1>
-  <p>Unsplash открывается в браузере, но не из терминала. Эта страница скачает все 50 фото в папку <code>assets/products</code>.</p>
+  <p><strong>Устарело.</strong> Запустите <code>npm run dev:images</code> и откройте <a href="http://localhost:5188/product-images.html">product-images.html</a>.</p>
+  <p>Unsplash открывается в браузере, но не из терминала. Эта страница скачает фото в <code>public/images</code>.</p>
   <ol>
     <li>Убедитесь, что VPN включён (unsplash.com открывается).</li>
-    <li>Нажмите кнопку и выберите папку <code>d:\kioskprototype\assets\products</code>.</li>
-    <li>После загрузки выполните в терминале: <code>python scripts/apply_local_paths.py</code></li>
+    <li>Запустите <code>npm run dev</code> и откройте <code>http://localhost:5173/download-products.html</code>.</li>
+    <li>Нажмите кнопку и выберите папку <code>public/images</code>.</li>
   </ol>
   <button id="go">Скачать все фото</button>
   <div id="log"></div>

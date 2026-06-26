@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Фото товаров — kioskavostokprototype</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card: #fff;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --muted: #64748b;
+      --ok: #15803d;
+      --warn: #b45309;
+      --err: #b91c1c;
+      --accent: #1e3a5f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.75rem;
+      align-items: center;
+    }
+    .toolbar h1 { font-size: 1.1rem; margin: 0; flex: 1 1 200px; }
+    .toolbar button, .toolbar select, .toolbar input[type=search] {
+      font: inherit;
+      padding: 0.45rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+    }
+    .toolbar button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .toolbar button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .stats { font-size: 0.85rem; color: var(--muted); width: 100%; }
+    .stats strong { color: var(--text); }
+    main { padding: 1rem; max-width: 1400px; margin: 0 auto; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .card.saved { border-color: #86efac; }
+    .card.missing .thumb { background: #fef2f2; }
+    .thumb {
+      aspect-ratio: 1;
+      background: #f1f5f9;
+      position: relative;
+      overflow: hidden;
+    }
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.45rem;
+      border-radius: 999px;
+      background: rgba(0,0,0,.55);
+      color: #fff;
+    }
+    .badge.ok { background: var(--ok); }
+    .badge.preview { background: var(--warn); }
+    .body { padding: 0.65rem 0.75rem 0.75rem; flex: 1; display: flex; flex-direction: column; gap: 0.35rem; }
+    .name { font-weight: 600; font-size: 0.9rem; line-height: 1.25; }
+    .meta { font-size: 0.72rem; color: var(--muted); word-break: break-all; }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: auto; }
+    .actions button {
+      font: inherit;
+      font-size: 0.75rem;
+      padding: 0.3rem 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+    }
+    .actions button:hover { background: #f8fafc; }
+    .log {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: ui-monospace, monospace;
+      font-size: 0.8rem;
+      max-height: 180px;
+      overflow: auto;
+      white-space: pre-wrap;
+    }
+    .log .ok { color: var(--ok); }
+    .log .err { color: var(--err); }
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,.45);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: 14px;
+      width: min(480px, 100%);
+      max-height: 90vh;
+      overflow: auto;
+      padding: 1.25rem;
+      box-shadow: 0 20px 50px rgba(0,0,0,.2);
+    }
+    .modal h2 { margin: 0 0 0.75rem; font-size: 1.1rem; }
+    .modal-preview {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 1rem;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #f1f5f9;
+    }
+    .modal-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .modal label { display: block; font-size: 0.85rem; margin: 0.75rem 0 0.25rem; color: var(--muted); }
+    .modal input[type=text], .modal input[type=file] { width: 100%; font: inherit; padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px; }
+    .modal-actions { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
+    .modal-actions button { flex: 1; min-width: 120px; font: inherit; padding: 0.55rem; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; }
+    .modal-actions .primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .hint { font-size: 0.85rem; color: var(--muted); margin: 0 0 1rem; }
+    .folder-ok { color: var(--ok); font-size: 0.85rem; }
+    .folder-miss { color: var(--warn); font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <header class="toolbar">
+    <h1>Фото товаров <small style="font-weight:400;color:#64748b">· kioskavostokprototype</small></h1>
+    <input type="search" id="search" placeholder="Поиск…" aria-label="Поиск">
+    <select id="filter-cat" aria-label="Категория">
+      <option value="">Все категории</option>
+    </select>
+    <select id="filter-status" aria-label="Статус">
+      <option value="">Все статусы</option>
+      <option value="saved">Сохранено в проекте</option>
+      <option value="preview">Только превью</option>
+    </select>
+    <button type="button" id="btn-folder">Выбрать папку images</button>
+    <button type="button" id="btn-all" class="primary" disabled>Скачать все</button>
+    <button type="button" id="btn-missing" disabled>Скачать недостающие</button>
+    <p class="stats" id="stats"></p>
+  </header>
+
+  <main>
+    <p class="hint">Страница загрузчика фото (не киоск). Запуск: <code>npm run dev:images</code> → порт <strong>5188</strong>. VPN для Unsplash. Выберите папку <code>public/images</code>.</p>
+    <p id="folder-status" class="folder-miss">Папка не выбрана — сохранение недоступно</p>
+    <div class="grid" id="grid"></div>
+    <div class="log" id="log" hidden></div>
+  </main>
+
+  <div class="modal-backdrop" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <h2 id="modal-title">Заменить фото</h2>
+      <div class="modal-preview"><img id="modal-img" alt=""></div>
+      <label for="modal-url">URL картинки (Unsplash или любой прямой URL)</label>
+      <input type="text" id="modal-url" placeholder="https://images.unsplash.com/photo-… или photo-1546069901-…">
+      <label for="modal-file">Или загрузить файл с компьютера</label>
+      <input type="file" id="modal-file" accept="image/jpeg,image/png,image/webp,image/*">
+      <p id="modal-file-hint" class="hint" style="margin:0.35rem 0 0"></p>
+      <div class="modal-actions">
+        <button type="button" id="modal-shuffle">Другое с Unsplash</button>
+        <button type="button" id="modal-preview-btn">Обновить превью</button>
+        <button type="button" id="modal-save" class="primary">Сохранить в папку</button>
+        <button type="button" id="modal-close">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/product-images-data.js"></script>
+  <script>
+    const IMG = 'w=500&h=500&fit=crop&q=85&auto=format';
+    const MIN_BYTES = 8000;
+
+    let dirHandle = null;
+    let modalProduct = null;
+    let modalBlob = null;
+    let modalPreviewUrl = null;
+    let modalUseLocalFile = false;
+
+    const itemState = new Map();
+    const urlCache = new Map();
+
+    function unsplashUrl(photo) {
+      const id = photo.startsWith('photo-') ? photo : `photo-${photo}`;
+      return `https://images.unsplash.com/${id}?${IMG}`;
+    }
+
+    function parseImageUrl(input) {
+      const s = input.trim();
+      if (!s) return null;
+      if (s.startsWith('http')) return s;
+      if (s.startsWith('photo-')) return unsplashUrl(s);
+      if (/^\d+-/.test(s)) return unsplashUrl('photo-' + s);
+      return unsplashUrl(s);
+    }
+
+    function localPath(file) {
+      return `images/${file}`;
+    }
+
+    function getPreviewUrl(p) {
+      const st = itemState.get(p.id);
+      if (st?.customUrl) return st.customUrl;
+      if (st?.photo) return unsplashUrl(st.photo);
+      return unsplashUrl(p.photo);
+    }
+
+    function getDisplayUrl(p) {
+      const st = itemState.get(p.id);
+      // Выбранное пользователем фото важнее старого файла на диске
+      if (st?.customUrl) return st.customUrl;
+      if (st?.saved) {
+        const t = st.cacheBust || '';
+        return `${localPath(p.file)}${t ? `?t=${t}` : ''}`;
+      }
+      return getPreviewUrl(p);
+    }
+
+    function log(msg, cls = '') {
+      const el = document.getElementById('log');
+      el.hidden = false;
+      const line = document.createElement('div');
+      line.className = cls;
+      line.textContent = msg;
+      el.appendChild(line);
+      line.scrollIntoView({ block: 'nearest' });
+    }
+
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    function fetchWithTimeout(url, ms = 25000) {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), ms);
+      return fetch(url, {
+        signal: ctrl.signal,
+        mode: 'cors',
+        credentials: 'omit',
+        referrerPolicy: 'no-referrer-when-downgrade',
+      }).finally(() => clearTimeout(t));
+    }
+
+    async function fetchBlobOnce(url) {
+      const res = await fetchWithTimeout(url);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const blob = await res.blob();
+      if (blob.size < MIN_BYTES) throw new Error('файл слишком маленький');
+      return blob;
+    }
+
+    async function fetchBlobViaImage(url) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+          try {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            canvas.getContext('2d').drawImage(img, 0, 0);
+            canvas.toBlob((blob) => {
+              if (blob && blob.size >= MIN_BYTES) resolve(blob);
+              else reject(new Error('не удалось конвертировать изображение'));
+            }, 'image/jpeg', 0.92);
+          } catch (e) {
+            reject(e);
+          }
+        };
+        img.onerror = () => reject(new Error('не загрузилось в img'));
+        img.src = url;
+      });
+    }
+
+    async function fetchBlob(url) {
+      if (urlCache.has(url)) return urlCache.get(url);
+      let lastError;
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+          const blob = await fetchBlobOnce(url);
+          urlCache.set(url, blob);
+          return blob;
+        } catch (e) {
+          lastError = e;
+          await sleep(400 * attempt);
+        }
+      }
+      try {
+        const blob = await fetchBlobViaImage(url);
+        urlCache.set(url, blob);
+        return blob;
+      } catch {
+        throw lastError;
+      }
+    }
+
+    function saveUrlsForProduct(p) {
+      const st = itemState.get(p.id);
+      const list = [];
+      const add = (url) => {
+        if (url && !list.includes(url)) list.push(url);
+      };
+      if (st?.customUrl && !st.customUrl.startsWith('blob:')) {
+        add(st.customUrl);
+        return list;
+      }
+      add(unsplashUrl(st?.photo || p.photo));
+      for (const alt of p.altPhotos || []) add(unsplashUrl(alt));
+      return list;
+    }
+
+    async function resolveBlobForSave(p, forcedBlob = null) {
+      if (forcedBlob) return forcedBlob;
+      if (modalBlob && modalProduct?.id === p.id) return modalBlob;
+      const st = itemState.get(p.id);
+      if (st?.pendingFile) return st.pendingFile;
+      return fetchBlobForProduct(p);
+    }
+
+    async function fetchBlobForProduct(p) {
+      const urls = saveUrlsForProduct(p);
+      let lastError;
+      for (const url of urls) {
+        try {
+          return await fetchBlob(url);
+        } catch (e) {
+          lastError = e;
+        }
+      }
+      throw lastError || new Error('Failed to fetch');
+    }
+
+    async function saveToDir(file, blob) {
+      if (!dirHandle) throw new Error('сначала выберите папку');
+      const fh = await dirHandle.getFileHandle(file, { create: true });
+      const w = await fh.createWritable();
+      await w.write(blob);
+      await w.close();
+    }
+
+    async function checkLocal(file) {
+      try {
+        const res = await fetch(localPath(file), { method: 'HEAD', cache: 'no-store' });
+        const len = Number(res.headers.get('content-length') || 0);
+        return res.ok && len >= MIN_BYTES;
+      } catch {
+        return false;
+      }
+    }
+
+    function getModalFile() {
+      return document.getElementById('modal-file').files?.[0] || null;
+    }
+
+    function isImageFile(file) {
+      return file.type.startsWith('image/')
+        || /\.(jpe?g|png|webp|gif|bmp)$/i.test(file.name);
+    }
+
+    function applyLocalFile(file, product = modalProduct) {
+      if (!file || !product) return;
+      if (!isImageFile(file)) {
+        throw new Error('Нужен файл изображения (JPG, PNG, WebP)');
+      }
+      modalBlob = file;
+      modalUseLocalFile = true;
+      document.getElementById('modal-url').value = '';
+      document.getElementById('modal-file-hint').textContent =
+        `Выбран файл: ${file.name} (${Math.round(file.size / 1024)} КБ)`;
+      const blobUrl = URL.createObjectURL(file);
+      setModalPreview(blobUrl);
+      const st = itemState.get(product.id) || { photo: product.photo };
+      if (st.localPreview && st.customUrl?.startsWith('blob:')) {
+        URL.revokeObjectURL(st.customUrl);
+      }
+      itemState.set(product.id, {
+        ...st,
+        customUrl: blobUrl,
+        pendingFile: file,
+        localPreview: true,
+        saved: false,
+      });
+    }
+
+    function clearPendingFile(productId) {
+      if (!productId) return;
+      const st = itemState.get(productId);
+      if (!st) return;
+      if (st.localPreview && st.customUrl?.startsWith('blob:')) {
+        URL.revokeObjectURL(st.customUrl);
+      }
+      itemState.set(productId, {
+        ...st,
+        pendingFile: null,
+        localPreview: false,
+        customUrl: st.customUrl?.startsWith('blob:') ? null : st.customUrl,
+      });
+    }
+
+    function clearModalFile(clearState = false) {
+      modalBlob = null;
+      modalUseLocalFile = false;
+      document.getElementById('modal-file').value = '';
+      document.getElementById('modal-file-hint').textContent = '';
+      if (clearState && modalProduct) clearPendingFile(modalProduct.id);
+    }
+
+    function randomAltPhoto(exclude) {
+      const pool = window.PRODUCT_IMAGE_POOL || [];
+      const candidates = pool.filter((ph) => ph !== exclude);
+      return candidates[Math.floor(Math.random() * candidates.length)] || exclude;
+    }
+
+    function renderCard(p) {
+      const st = itemState.get(p.id) || { saved: false, photo: p.photo };
+      const card = document.createElement('article');
+      card.className = 'card' + (st.saved ? ' saved' : ' missing');
+      card.dataset.id = p.id;
+      card.dataset.category = p.category;
+      card.dataset.saved = st.saved ? '1' : '0';
+
+      const preview = getDisplayUrl(p);
+      const badge = st.localPreview
+        ? '<span class="badge preview">файл с компьютера</span>'
+        : st.customUrl
+        ? '<span class="badge preview">новое фото</span>'
+        : st.saved
+          ? '<span class="badge ok">в проекте</span>'
+          : '<span class="badge preview">превью</span>';
+
+      card.innerHTML = `
+        <div class="thumb">
+          ${badge}
+          <img src="${preview}" alt="${p.name}" loading="lazy">
+        </div>
+        <div class="body">
+          <div class="name">${p.name}</div>
+          <div class="meta">${p.file}</div>
+          <div class="actions">
+            <button type="button" data-act="save">Сохранить</button>
+            <button type="button" data-act="replace">Заменить</button>
+            <button type="button" data-act="shuffle" title="Случайное фото с Unsplash">↻</button>
+          </div>
+        </div>`;
+
+      const img = card.querySelector('img');
+      img.onerror = () => {
+        if (!img.dataset.fallback) {
+          img.dataset.fallback = '1';
+          img.src = getPreviewUrl(p);
+        }
+      };
+
+      card.querySelector('[data-act=save]').onclick = () => saveOne(p);
+      card.querySelector('[data-act=replace]').onclick = () => openModal(p);
+      card.querySelector('[data-act=shuffle]').onclick = () => shuffleOne(p);
+
+      return card;
+    }
+
+    function updateCard(p) {
+      const old = document.querySelector(`[data-id="${p.id}"]`);
+      const neu = renderCard(p);
+      old?.replaceWith(neu);
+      updateStats();
+    }
+
+    function filteredProducts() {
+      const q = document.getElementById('search').value.trim().toLowerCase();
+      const cat = document.getElementById('filter-cat').value;
+      const status = document.getElementById('filter-status').value;
+      return window.PRODUCT_IMAGES.filter((p) => {
+        if (cat && p.category !== cat) return false;
+        const st = itemState.get(p.id);
+        if (status === 'saved' && !st?.saved) return false;
+        if (status === 'preview' && st?.saved) return false;
+        if (q && !(`${p.name} ${p.id} ${p.file}`).toLowerCase().includes(q)) return false;
+        return true;
+      });
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+      for (const p of filteredProducts()) {
+        grid.appendChild(renderCard(p));
+      }
+      updateStats();
+    }
+
+    function updateStats() {
+      const all = window.PRODUCT_IMAGES;
+      const saved = all.filter((p) => itemState.get(p.id)?.saved).length;
+      document.getElementById('stats').innerHTML =
+        `Всего: <strong>${all.length}</strong> · в проекте: <strong>${saved}</strong> · превью: <strong>${all.length - saved}</strong>`;
+    }
+
+    async function refreshLocalStatus() {
+      await Promise.all(window.PRODUCT_IMAGES.map(async (p) => {
+        const saved = await checkLocal(p.file);
+        const prev = itemState.get(p.id) || { photo: p.photo };
+        if (prev.pendingFile || prev.localPreview) return;
+        itemState.set(p.id, {
+          ...prev,
+          saved,
+          cacheBust: saved ? (prev.cacheBust || Date.now()) : prev.cacheBust,
+        });
+      }));
+      renderGrid();
+    }
+
+    async function saveOne(p, forcedBlob = null) {
+      try {
+        if (!dirHandle) throw new Error('сначала выберите папку images');
+        const blob = await resolveBlobForSave(p, forcedBlob);
+        if (blob.size < 1000) throw new Error('файл слишком маленький');
+        await saveToDir(p.file, blob);
+        const st = itemState.get(p.id) || { photo: p.photo };
+        if (st.localPreview && st.customUrl?.startsWith('blob:')) {
+          URL.revokeObjectURL(st.customUrl);
+        }
+        itemState.set(p.id, {
+          ...st,
+          saved: true,
+          cacheBust: Date.now(),
+          customUrl: null,
+          localPreview: false,
+          pendingFile: null,
+        });
+        log(`OK  ${p.name} → ${p.file}`, 'ok');
+        updateCard(p);
+      } catch (e) {
+        log(`FAIL ${p.name}: ${e.message}`, 'err');
+      }
+    }
+
+    async function shuffleOne(p) {
+      const st = itemState.get(p.id) || { photo: p.photo };
+      if (st.localPreview && st.customUrl?.startsWith('blob:')) {
+        URL.revokeObjectURL(st.customUrl);
+      }
+      const next = randomAltPhoto(st.photo);
+      itemState.set(p.id, {
+        ...st,
+        photo: next,
+        customUrl: null,
+        pendingFile: null,
+        localPreview: false,
+        saved: false,
+      });
+      updateCard(p);
+    }
+
+    async function saveMany(list) {
+      document.getElementById('btn-all').disabled = true;
+      document.getElementById('btn-missing').disabled = true;
+      let ok = 0, fail = 0;
+      for (let i = 0; i < list.length; i++) {
+        const p = list[i];
+        try {
+          await saveOne(p);
+          ok++;
+        } catch {
+          fail++;
+        }
+        await sleep(450);
+      }
+      log(`\nПакет: ${ok} ok, ${fail} fail`, fail ? 'err' : 'ok');
+      document.getElementById('btn-all').disabled = !dirHandle;
+      document.getElementById('btn-missing').disabled = !dirHandle;
+      await refreshLocalStatus();
+    }
+
+    function openModal(p) {
+      modalProduct = p;
+      modalBlob = null;
+      modalUseLocalFile = false;
+      const st = itemState.get(p.id) || { photo: p.photo };
+      document.getElementById('modal-title').textContent = `Заменить: ${p.name}`;
+      document.getElementById('modal-file').value = '';
+      if (st.pendingFile) {
+        modalBlob = st.pendingFile;
+        modalUseLocalFile = true;
+        document.getElementById('modal-url').value = '';
+        document.getElementById('modal-file-hint').textContent =
+          `Выбран файл: ${st.pendingFile.name} (${Math.round(st.pendingFile.size / 1024)} КБ)`;
+        setModalPreview(st.customUrl || getPreviewUrl(p));
+      } else {
+        document.getElementById('modal-url').value =
+          st.customUrl && !st.customUrl.startsWith('blob:')
+            ? st.customUrl
+            : unsplashUrl(st.photo);
+        document.getElementById('modal-file-hint').textContent = '';
+        setModalPreview(getPreviewUrl(p));
+      }
+      document.getElementById('modal').classList.add('open');
+    }
+
+    function setModalPreview(url) {
+      if (modalPreviewUrl?.startsWith('blob:')) URL.revokeObjectURL(modalPreviewUrl);
+      modalPreviewUrl = url;
+      document.getElementById('modal-img').src = url;
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('open');
+      modalProduct = null;
+      modalBlob = null;
+      modalUseLocalFile = false;
+      if (modalPreviewUrl?.startsWith('blob:')) URL.revokeObjectURL(modalPreviewUrl);
+      modalPreviewUrl = null;
+    }
+
+    async function applyModalPreview() {
+      if (!modalProduct) return;
+      const localFile = getModalFile();
+      if (localFile || modalUseLocalFile) {
+        applyLocalFile(localFile || modalBlob);
+        updateCard(modalProduct);
+        return;
+      }
+      clearModalFile(false);
+      const raw = document.getElementById('modal-url').value.trim();
+      const url = parseImageUrl(raw);
+      if (!url) throw new Error('укажите URL или выберите файл');
+      modalBlob = null;
+      modalUseLocalFile = false;
+      setModalPreview(url);
+      const st = itemState.get(modalProduct.id) || { photo: modalProduct.photo };
+      if (st.localPreview && st.customUrl?.startsWith('blob:')) {
+        URL.revokeObjectURL(st.customUrl);
+      }
+      itemState.set(modalProduct.id, {
+        ...st,
+        customUrl: url,
+        pendingFile: null,
+        localPreview: false,
+        saved: false,
+      });
+      updateCard(modalProduct);
+    }
+
+    document.getElementById('btn-folder').onclick = async () => {
+      try {
+        dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+        document.getElementById('folder-status').textContent = 'Папка выбрана — можно сохранять файлы';
+        document.getElementById('folder-status').className = 'folder-ok';
+        document.getElementById('btn-all').disabled = false;
+        document.getElementById('btn-missing').disabled = false;
+      } catch {
+        log('Выбор папки отменён', 'err');
+      }
+    };
+
+    document.getElementById('btn-all').onclick = () => saveMany(window.PRODUCT_IMAGES);
+
+    document.getElementById('btn-missing').onclick = () => {
+      const list = window.PRODUCT_IMAGES.filter((p) => !itemState.get(p.id)?.saved);
+      saveMany(list);
+    };
+
+    document.getElementById('search').oninput = renderGrid;
+    document.getElementById('filter-cat').onchange = renderGrid;
+    document.getElementById('filter-status').onchange = renderGrid;
+
+    document.getElementById('modal-close').onclick = closeModal;
+    document.getElementById('modal').onclick = (e) => { if (e.target.id === 'modal') closeModal(); };
+
+    document.getElementById('modal-preview-btn').onclick = async () => {
+      try {
+        await applyModalPreview();
+        if (modalProduct) updateCard(modalProduct);
+      } catch (e) {
+        alert(e.message);
+      }
+    };
+
+    document.getElementById('modal-shuffle').onclick = async () => {
+      if (!modalProduct) return;
+      clearModalFile(true);
+      const st = itemState.get(modalProduct.id) || { photo: modalProduct.photo };
+      const next = randomAltPhoto(st.photo);
+      itemState.set(modalProduct.id, { ...st, photo: next, customUrl: unsplashUrl(next) });
+      document.getElementById('modal-url').value = unsplashUrl(next);
+      setModalPreview(unsplashUrl(next));
+    };
+
+    document.getElementById('modal-save').onclick = async () => {
+      if (!modalProduct) return;
+      const product = modalProduct;
+      try {
+        const localFile = getModalFile();
+        let blobToSave = null;
+        if (localFile || (modalUseLocalFile && modalBlob)) {
+          blobToSave = localFile || modalBlob;
+          applyLocalFile(blobToSave);
+        } else {
+          await applyModalPreview();
+        }
+        await saveOne(product, blobToSave);
+        closeModal();
+      } catch (e) {
+        alert(e.message);
+      }
+    };
+
+    document.getElementById('modal-file').onchange = () => {
+      const f = getModalFile();
+      if (!f) return;
+      try {
+        applyLocalFile(f);
+        updateCard(modalProduct);
+      } catch (e) {
+        alert(e.message);
+        clearModalFile();
+      }
+    };
+
+    document.getElementById('modal-url').oninput = () => {
+      if (modalUseLocalFile || getModalFile()) {
+        clearModalFile(true);
+      }
+    };
+
+    (async function init() {
+      if (!window.PRODUCT_IMAGES) {
+        document.querySelector('main').innerHTML = '<p class="err">Не загружен product-images-data.js</p>';
+        return;
+      }
+      const catSelect = document.getElementById('filter-cat');
+      for (const [id, label] of Object.entries(window.PRODUCT_CATEGORIES)) {
+        const opt = document.createElement('option');
+        opt.value = id;
+        opt.textContent = label;
+        catSelect.appendChild(opt);
+      }
+      for (const p of window.PRODUCT_IMAGES) {
+        itemState.set(p.id, { photo: p.photo, saved: false });
+      }
+      renderGrid();
+      refreshLocalStatus();
+    })();
+  </script>
+</body>
+</html>

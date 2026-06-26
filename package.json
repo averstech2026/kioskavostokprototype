@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 5173",
+    "dev:images": "vite --port 5188 --strictPort --open /product-images.html",
     "dev:lan": "vite --host --port 8765",
     "build": "vite build",
     "preview": "vite preview",

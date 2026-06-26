@@ -20,5 +20,11 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        productImages: resolve(__dirname, 'product-images.html'),
+      },
+    },
   },
 });
