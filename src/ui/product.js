@@ -11,7 +11,7 @@ function updateProductCartAction() {
   const qty = state.cart[p.id] || 0;
   el.innerHTML = qty === 0 ? `
     <button type="button" data-action="add-to-cart" data-product="${p.id}"
-            class="btn-press w-full bg-navy text-white text-[28px] font-bold uppercase tracking-wide py-5 px-8 rounded-2xl flex items-center justify-center gap-3">
+            class="btn-press w-full bg-sidebar text-white text-[28px] font-bold uppercase tracking-wide py-5 px-8 rounded-2xl flex items-center justify-center gap-3">
       ${cartIconSvg('w-8 h-8')}
       В корзину
     </button>` : `

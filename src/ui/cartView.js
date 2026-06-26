@@ -14,7 +14,7 @@ function renderCart() {
           <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.5 5M17 13l2.5 5"/>
         </svg>
         <p class="text-[32px] text-gray-400 font-medium">Корзина пуста</p>
-        <button data-action="go-menu" class="btn-press mt-8 bg-navy text-white text-[26px] font-bold uppercase px-12 py-5 rounded-full">
+        <button data-action="go-menu" class="btn-press mt-8 bg-kiosk-red text-white text-[26px] font-bold uppercase px-12 py-5 rounded-full">
           Перейти в меню
         </button>
       </div>`;

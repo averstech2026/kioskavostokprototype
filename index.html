@@ -13,8 +13,9 @@
             navy: '#000000',
             'navy-dark': '#1A1A1A',
             kiosk: '#F3F4F6',
-            'kiosk-red': '#FF6B00',
-            'pay-red': '#FF6B00',
+            sidebar: '#27272A',
+            'kiosk-red': '#F7931E',
+            'pay-red': '#F7931E',
           },
           fontFamily: {
             sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
@@ -50,7 +51,7 @@
           <img src="assets/card.png" alt="" width="340" height="303" class="card-icon w-[340px] h-[303px]" />
 
           <button data-action="go-menu"
-                  class="btn-press bg-navy text-white text-[42px] font-bold uppercase tracking-wider py-8 px-20 rounded-full shadow-lg">
+                  class="btn-press bg-kiosk-red text-white text-[42px] font-bold uppercase tracking-wider py-8 px-20 rounded-full shadow-lg">
             Начать покупки
           </button>
 
@@ -124,7 +125,7 @@
             </div>
             <div class="inline-flex rounded-full overflow-hidden border border-gray-200 bg-white text-[17px] font-semibold uppercase tracking-wide shrink-0 ml-auto">
               <button type="button" id="layout-btn-1" data-action="set-menu-view" data-view="scroll"
-                      class="btn-press px-5 py-3 bg-navy text-white whitespace-nowrap">Макет 1</button>
+                      class="btn-press px-5 py-3 bg-kiosk-red text-white whitespace-nowrap">Макет 1</button>
               <button type="button" id="layout-btn-2" data-action="set-menu-view" data-view="grid"
                       class="btn-press px-5 py-3 text-gray-500 whitespace-nowrap">Макет 2</button>
               <button type="button" id="layout-btn-3" data-action="set-menu-view" data-view="browse"
@@ -135,7 +136,7 @@
 
         <div class="flex flex-1 min-h-0">
           <!-- Сайдбар -->
-          <nav id="sidebar" class="w-[200px] bg-navy shrink-0 flex flex-col overflow-y-auto hide-scrollbar"></nav>
+          <nav id="sidebar" class="w-[200px] bg-sidebar shrink-0 flex flex-col overflow-y-auto hide-scrollbar border-r border-white/10"></nav>
 
           <!-- Контент меню -->
           <main id="menu-content" class="relative flex-1 overflow-y-auto kiosk-scroll px-6 pb-4 bg-kiosk"></main>
@@ -149,12 +150,12 @@
           </button>
           <button data-action="try-pay"
                   class="btn-press btn-kiosk-pay flex-1 min-w-0 min-h-[96px] h-[96px]">
-            <span class="flex w-full h-full items-center justify-center bg-navy text-white text-[30px] font-bold uppercase tracking-wide rounded-full whitespace-nowrap px-6">
+            <span class="flex w-full h-full items-center justify-center bg-kiosk-red text-white text-[30px] font-bold uppercase tracking-wide rounded-full whitespace-nowrap px-6">
               Оплатить покупку
             </span>
           </button>
           <button data-action="go-cart" class="btn-press shrink-0 flex flex-col items-center gap-1 relative">
-            <div class="w-20 h-20 bg-navy rounded-2xl flex items-center justify-center relative">
+            <div class="w-20 h-20 bg-sidebar rounded-2xl flex items-center justify-center relative">
               <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.5 5M17 13l2.5 5M9 19a1 1 0 100 2 1 1 0 000-2zm8 0a1 1 0 100 2 1 1 0 000-2z"/>
               </svg>
@@ -228,13 +229,13 @@
           </button>
           <button data-action="open-voice-search" type="button"
                   class="btn-press btn-kiosk-pay flex-1 min-w-0 min-h-[96px] h-[96px]">
-            <span class="flex w-full h-full items-center justify-center bg-navy text-white text-[30px] font-bold uppercase tracking-wide rounded-full whitespace-nowrap px-6">
+            <span class="flex w-full h-full items-center justify-center bg-kiosk-red text-white text-[30px] font-bold uppercase tracking-wide rounded-full whitespace-nowrap px-6">
               Голосом
             </span>
           </button>
           <button data-action="go-cart" type="button"
                   class="btn-press shrink-0 flex flex-col items-center gap-1 relative">
-            <div class="w-20 h-20 bg-navy rounded-2xl flex items-center justify-center relative">
+            <div class="w-20 h-20 bg-sidebar rounded-2xl flex items-center justify-center relative">
               <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.5 5M17 13l2.5 5M9 19a1 1 0 100 2 1 1 0 000-2zm8 0a1 1 0 100 2 1 1 0 000-2z"/>
               </svg>
@@ -311,13 +312,13 @@
           </button>
           <button data-action="voice-apply-search" type="button"
                   class="btn-press btn-kiosk-pay flex-1 min-w-0 min-h-[96px] h-[96px]">
-            <span class="flex w-full h-full items-center justify-center bg-navy text-white text-[30px] font-bold uppercase tracking-wide rounded-full whitespace-nowrap px-6">
+            <span class="flex w-full h-full items-center justify-center bg-kiosk-red text-white text-[30px] font-bold uppercase tracking-wide rounded-full whitespace-nowrap px-6">
               В поиск
             </span>
           </button>
           <button data-action="go-cart" type="button"
                   class="btn-press shrink-0 flex flex-col items-center gap-1 relative">
-            <div class="w-20 h-20 bg-navy rounded-2xl flex items-center justify-center relative">
+            <div class="w-20 h-20 bg-sidebar rounded-2xl flex items-center justify-center relative">
               <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.5 5M17 13l2.5 5M9 19a1 1 0 100 2 1 1 0 000-2zm8 0a1 1 0 100 2 1 1 0 000-2z"/>
               </svg>
@@ -456,12 +457,12 @@
 
         <footer class="shrink-0 bg-kiosk px-14 py-8 flex items-stretch gap-5">
           <button data-action="go-menu"
-                  class="btn-press flex-1 bg-white border-2 border-navy text-navy text-[28px] font-bold uppercase rounded-full flex items-center justify-center text-center pay-footer-btn">
+                  class="btn-press flex-1 bg-white border-2 border-kiosk-red text-kiosk-red text-[28px] font-bold uppercase rounded-full flex items-center justify-center text-center pay-footer-btn">
             В меню
           </button>
           <button data-action="try-pay"
                   class="btn-press btn-kiosk-pay flex-1 pay-footer-btn">
-            <span class="flex w-full h-full items-center justify-center bg-navy text-white text-[28px] font-bold uppercase rounded-full">
+            <span class="flex w-full h-full items-center justify-center bg-kiosk-red text-white text-[28px] font-bold uppercase rounded-full">
               Оплатить покупку
             </span>
           </button>
@@ -508,21 +509,21 @@
             </button>
             <button data-action="pay-bank"
                     class="btn-press btn-kiosk-pay w-full">
-              <span class="block w-full bg-navy text-white text-[30px] font-bold uppercase py-8 rounded-full text-center tracking-wide">
+              <span class="block w-full bg-white border-2 border-kiosk-red text-kiosk-red text-[30px] font-bold uppercase py-8 rounded-full text-center tracking-wide">
                 Оплатить банковской картой
               </span>
             </button>
             <button type="button" data-action="toggle-print-receipt"
                     class="btn-press flex items-center justify-center gap-5 bg-white border-2 border-gray-300 text-navy text-[28px] font-bold uppercase py-7 rounded-full w-full">
               <span id="print-receipt-indicator"
-                    class="w-9 h-9 rounded border-2 border-navy bg-navy text-white flex items-center justify-center shrink-0 text-[22px] leading-none">✓</span>
+                    class="w-9 h-9 rounded border-2 border-kiosk-red bg-kiosk-red text-white flex items-center justify-center shrink-0 text-[22px] leading-none">✓</span>
               Печать чека
             </button>
           </div>
 
           <div class="flex items-stretch gap-5 pb-4">
             <button data-action="go-menu"
-                    class="btn-press flex-1 bg-white border-2 border-navy text-navy text-[26px] font-bold uppercase rounded-full flex items-center justify-center pay-footer-btn">
+                    class="btn-press flex-1 bg-white border-2 border-kiosk-red text-kiosk-red text-[26px] font-bold uppercase rounded-full flex items-center justify-center pay-footer-btn">
               В меню
             </button>
             <button data-action="cancel-order"
@@ -570,7 +571,7 @@
           </div>
           <div class="modal-panel-footer flex flex-col gap-5">
             <button data-action="upsell-add"
-                    class="btn-press bg-navy text-white text-[32px] font-bold uppercase py-7 rounded-full">
+                    class="btn-press bg-kiosk-red text-white text-[32px] font-bold uppercase py-7 rounded-full">
               Добавить пакет — 50 ₽
             </button>
             <button data-action="upsell-skip"
@@ -597,7 +598,7 @@
 
         <footer class="px-14 pb-10 shrink-0">
           <button data-action="pay-success-done" type="button"
-                  class="btn-press w-full bg-navy text-white text-[32px] font-bold uppercase py-8 rounded-full tracking-wide">
+                  class="btn-press w-full bg-kiosk-red text-white text-[32px] font-bold uppercase py-8 rounded-full tracking-wide">
             Готово
           </button>
         </footer>
@@ -652,7 +653,7 @@
           </div>
           <div class="modal-panel-footer flex gap-5">
             <button data-action="confirm-terminal-pay" type="button"
-                    class="btn-press flex-1 bg-navy text-white text-[28px] font-bold uppercase py-6 rounded-full">
+                    class="btn-press flex-1 bg-kiosk-red text-white text-[28px] font-bold uppercase py-6 rounded-full">
               ОК
             </button>
             <button data-action="cancel-terminal-pay" type="button"
@@ -676,7 +677,7 @@
           </div>
           <div class="modal-panel-footer flex gap-5">
             <button data-action="apply-customer" type="button"
-                    class="btn-press flex-1 bg-navy text-white text-[28px] font-bold uppercase py-6 rounded-full">
+                    class="btn-press flex-1 bg-kiosk-red text-white text-[28px] font-bold uppercase py-6 rounded-full">
               ОК
             </button>
             <button data-action="cancel-customer-card" type="button"
@@ -699,7 +700,7 @@
           </div>
           <div class="modal-panel-footer">
             <button data-action="confirm-receipt-customer" type="button"
-                    class="btn-press w-full bg-navy text-white text-[30px] font-bold uppercase py-6 rounded-full">
+                    class="btn-press w-full bg-kiosk-red text-white text-[30px] font-bold uppercase py-6 rounded-full">
               ОК
             </button>
           </div>
@@ -720,7 +721,7 @@
           </div>
           <div class="modal-panel-footer flex gap-5">
             <button data-action="confirm-receipt-email" type="button"
-                    class="btn-press flex-1 bg-navy text-white text-[28px] font-bold uppercase py-6 rounded-full">
+                    class="btn-press flex-1 bg-kiosk-red text-white text-[28px] font-bold uppercase py-6 rounded-full">
               ОК
             </button>
             <button data-action="cancel-receipt-email" type="button"

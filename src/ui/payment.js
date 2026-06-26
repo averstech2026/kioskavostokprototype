@@ -38,11 +38,11 @@ function updatePrintReceiptUI() {
   if (!indicator) return;
   if (state.printReceipt) {
     indicator.textContent = '✓';
-    indicator.classList.add('bg-navy', 'text-white');
+    indicator.classList.add('bg-kiosk-red', 'text-white');
     indicator.classList.remove('bg-white', 'text-transparent');
   } else {
     indicator.textContent = '';
-    indicator.classList.remove('bg-navy', 'text-white');
+    indicator.classList.remove('bg-kiosk-red', 'text-white');
     indicator.classList.add('bg-white', 'text-transparent');
   }
 }

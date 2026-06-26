@@ -10,7 +10,7 @@ function renderSidebar() {
     return `
       <button data-action="select-category" data-category="${cat.id}"
               class="btn-press flex flex-col items-center justify-center gap-2 py-5 px-2 text-center
-                     ${active ? 'bg-kiosk-red text-white' : 'text-white/90 hover:bg-white/10'}">
+                     ${active ? 'bg-kiosk-red text-white' : 'text-white/85 hover:bg-white/10'}">
         <img src="${cat.icon}" alt="" class="sidebar-icon" />
         <span class="text-[17px] font-semibold leading-tight uppercase tracking-wide">${cat.label}</span>
       </button>`;
@@ -37,7 +37,7 @@ function productCard(p) {
         <div class="mt-auto">
         ${qty === 0 ? `
           <button data-action="add-to-cart" data-product="${p.id}"
-                  class="btn-press product-card-action w-full bg-navy text-white text-[20px] font-bold uppercase rounded-xl flex items-center justify-center gap-2">
+                  class="btn-press product-card-action w-full bg-sidebar text-white text-[20px] font-bold uppercase rounded-xl flex items-center justify-center gap-2">
             ${cartIconSvg('w-5 h-5')}
             В корзину
           </button>` : `
@@ -59,7 +59,7 @@ function updateViewToggle() {
     { id: 'layout-btn-2', view: 'grid' },
     { id: 'layout-btn-3', view: 'browse' },
   ];
-  const active = 'bg-navy text-white';
+  const active = 'bg-kiosk-red text-white';
   const inactive = 'text-gray-500';
   const base = 'btn-press px-5 py-3 whitespace-nowrap';
   views.forEach(({ id, view }) => {
