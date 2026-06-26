@@ -2,6 +2,7 @@ import { state } from '../core/state.js';
 import { PRODUCTS } from '../data/catalog.js';
 import { formatPrice, getCartItemLabel, cartQtyControl } from '../core/format.js';
 import { getSubtotal } from '../core/cart.js';
+import { productImage } from '../utils/productImage.js';
 
 // ─── Рендер корзины ────────────────────────────────────────────
 function renderCart() {
@@ -24,7 +25,7 @@ function renderCart() {
       const qty = state.cart[id];
       return `
         <div class="flex items-center gap-5 py-6 border-b border-gray-100 last:border-0">
-          <img src="${p.image}" alt="" class="w-[108px] h-[108px] object-cover rounded-2xl shrink-0 bg-gray-100" />
+          <img src="${productImage(p.image)}" alt="" class="w-[108px] h-[108px] object-cover rounded-2xl shrink-0 bg-gray-100" />
           <div class="flex-1 min-w-0 pr-2">
             <p class="text-[26px] font-medium text-gray-800 leading-snug">${getCartItemLabel(p)}</p>
           </div>

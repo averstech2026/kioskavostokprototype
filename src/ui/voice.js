@@ -7,6 +7,7 @@ import {
   formatPrice,
   cartQtyControl,
 } from '../core/format.js';
+import { productImage } from '../utils/productImage.js';
 import {
   addToCart,
   setCartQty,
@@ -141,7 +142,7 @@ function voiceChoiceRow(p) {
   const qty = state.voiceList[p.id] || 0;
   return `
     <button type="button" data-action="voice-choice-add" data-product="${p.id}" class="voice-choice-row btn-press${qty > 0 ? ' has-qty' : ''}">
-      <img src="${p.image}" alt="${p.name}" class="voice-choice-row-img" loading="lazy" />
+      <img src="${productImage(p.image)}" alt="${p.name}" class="voice-choice-row-img" loading="lazy" />
       <div class="flex-1 min-w-0">
         <p class="voice-choice-row-name">${p.name}</p>
         <p class="voice-choice-row-price">${formatPrice(p.price)}</p>
@@ -280,7 +281,7 @@ function voiceQtyControl(id, qty) {
 function voiceResultRow(p, qty, isNew) {
   return `
     <div class="search-result-row flex items-center gap-5 py-5 px-6 border-b border-gray-100${isNew ? ' voice-result-row-new' : ''}" data-voice-product="${p.id}">
-      <img src="${p.image}" alt="${p.name}" class="w-[100px] h-[100px] object-cover rounded-xl shrink-0 bg-gray-50" loading="lazy" />
+      <img src="${productImage(p.image)}" alt="${p.name}" class="w-[100px] h-[100px] object-cover rounded-xl shrink-0 bg-gray-50" loading="lazy" />
       <p class="flex-1 min-w-0 text-[26px] font-medium text-gray-800 leading-snug pr-2">${p.name}</p>
       <span class="text-[30px] font-extrabold text-navy shrink-0 w-[100px] text-right leading-none">${formatPrice(p.price)}</span>
       ${voiceQtyControl(p.id, qty)}

@@ -2,6 +2,7 @@ import { state } from '../core/state.js';
 import { CATEGORIES, PRODUCTS } from '../data/catalog.js';
 import { cartIconSvg } from '../core/format.js';
 import { navigateTo } from '../core/navigation.js';
+import { productImage } from '../utils/productImage.js';
 
 // ─── Открыть карточку товара ───────────────────────────────────
 function updateProductCartAction() {
@@ -28,7 +29,7 @@ function openProduct(productId) {
   const p = PRODUCTS.find(x => x.id === productId);
   if (!p) return;
   state.currentProduct = p;
-  document.getElementById('product-image').src = p.image;
+  document.getElementById('product-image').src = productImage(p.image);
   document.getElementById('product-image').alt = p.name;
   document.getElementById('product-title').textContent = p.name;
   document.getElementById('product-composition').textContent = p.composition || '—';

@@ -3,6 +3,7 @@ import { PRODUCTS, SEARCH_KEYBOARD_ROWS, SEARCH_KB_ICON } from '../data/catalog.
 import { formatPrice, cartIconSvg, cartQtyControl } from '../core/format.js';
 import { getSubtotal } from '../core/cart.js';
 import { navigateTo } from '../core/navigation.js';
+import { productImage } from '../utils/productImage.js';
 
 // ─── Поиск ─────────────────────────────────────────────────────
 function filterProductsByQuery(query) {
@@ -24,7 +25,7 @@ function searchResultRow(p) {
     </button>` : cartQtyControl(p.id, qty);
   return `
     <div class="search-result-row flex items-center gap-5 py-5 px-6 border-b border-gray-100">
-      <img src="${p.image}" alt="${p.name}" class="w-[100px] h-[100px] object-cover rounded-xl shrink-0 bg-gray-50" loading="lazy" />
+      <img src="${productImage(p.image)}" alt="${p.name}" class="w-[100px] h-[100px] object-cover rounded-xl shrink-0 bg-gray-50" loading="lazy" />
       <p class="flex-1 min-w-0 text-[26px] font-medium text-gray-800 leading-snug pr-2">${p.name}</p>
       <span class="text-[30px] font-extrabold text-navy shrink-0 w-[100px] text-right leading-none">${formatPrice(p.price)}</span>
       ${cartBtn}

@@ -1,6 +1,7 @@
 import { state } from '../core/state.js';
 import { CATEGORIES, PRODUCTS } from '../data/catalog.js';
 import { formatPrice, cartIconSvg } from '../core/format.js';
+import { productImage } from '../utils/productImage.js';
 
 // ─── Рендер сайдбара ───────────────────────────────────────────
 function renderSidebar() {
@@ -24,7 +25,7 @@ function productCard(p) {
     <div class="bg-white rounded-2xl shadow-sm overflow-hidden shrink-0 w-[240px] flex flex-col">
       <div class="relative shrink-0">
         <button data-action="open-product" data-product="${p.id}" class="block w-full">
-          <img src="${p.image}" alt="${p.name}" class="w-full h-[160px] object-cover" loading="lazy" />
+          <img src="${productImage(p.image)}" alt="${p.name}" class="w-full h-[160px] object-cover" loading="lazy" />
         </button>
         <button type="button" tabindex="-1" class="absolute top-3 right-3 w-10 h-10 bg-white/80 rounded-full flex items-center justify-center text-gray-500 text-xl pointer-events-none">⋯</button>
       </div>
